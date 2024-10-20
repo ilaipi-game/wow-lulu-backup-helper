@@ -19,11 +19,16 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: '1.23.2'
-
+    - name: Install ImageMagick
+      run: |
+        sudo apt-get install -y imagemagick
+    - name: Convert PNG to ICO
+      run: |
+        convert ico.png icon.ico
     - name: Build with Icon
       run: |
-        go install github.com/tc-hib/go-winres@latest
-        go-winres simply --icon ico.png
+        go get github.com/akavel/rsrc
+        rsrc -ico icon.ico
         GOOS=windows GOARCH=amd64 go build -o wow-backup-helper.exe .
 
     - name: Create Release
