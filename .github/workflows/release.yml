@@ -1,0 +1,34 @@
+name: Build Go Application
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.23.2'
+
+    - name: Build
+      run: |
+        GOOS=windows GOARCH=amd64 go build -o wow-backup-helper.exe .
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: wow-backup-helper.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

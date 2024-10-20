@@ -1,0 +1,18 @@
+addons:
+  - "!Pig_Tardis"
+  - ActionBarSaverReloaded
+  - Routes
+  - SwitcherTracking
+  - FarmHud
+  - FarmHud_QuestArrow
+
+accounts:
+  - 671143768#1
+
+servers:
+  - 无畏
+  - 吉安娜
+
+roles:
+  - 全栈开发接单
+  - 接后台开发
