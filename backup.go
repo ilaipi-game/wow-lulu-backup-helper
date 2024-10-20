@@ -149,6 +149,50 @@ func backup(tempDir, workdir string) {
 			}
 		}
 	}
+
+	// 复制 SavedVariables 文件到临时 WTF 目录
+	for _, server := range config.Servers {
+		for _, role := range config.Roles {
+			savedVarsRoleDir := filepath.Join(workdir, "_classic_", "WTF", "Account", config.Accounts[0], server, role, "SavedVariables")
+
+			for _, addon := range config.Addons {
+				source := filepath.Join(savedVarsRoleDir, addon+".lua")
+				destination := filepath.Join(tempDir, "WTF", "Account", config.Accounts[0], server, role, "SavedVariables", addon+".lua")
+
+				// 创建目标路径
+				err = os.MkdirAll(filepath.Dir(destination), os.ModePerm)
+				if err != nil {
+					fmt.Printf("创建目标目录 %s 失败: %s\n", filepath.Dir(destination), err)
+					continue
+				}
+
+				// 检查 SavedVariables 文件是否存在
+				if _, err := os.Stat(source); os.IsNotExist(err) {
+					fmt.Printf("SavedVariables 文件 %s 不存在\n", source)
+					continue
+				}
+
+				// 复制 SavedVariables 文件
+				err := copyFile(source, destination)
+				if err != nil {
+					fmt.Printf("复制 SavedVariables 文件 %s 失败: %s\n", addon+".lua", err)
+				} else {
+					fmt.Printf("成功复制 SavedVariables 文件 %s\n", addon+".lua")
+				}
+			}
+
+			// 检查临时目录下的 SavedVariables 目录是否为空，如果为空则删除角色目录
+			tempSavedVarsDir := filepath.Join(tempDir, "WTF", "Account", config.Accounts[0], server, role, "SavedVariables")
+			if isEmpty(tempSavedVarsDir) {
+				err := os.RemoveAll(filepath.Join(tempDir, "WTF", "Account", config.Accounts[0], server, role))
+				if err != nil {
+					fmt.Printf("删除空目录 %s 失败: %s\n", filepath.Join(tempDir, "WTF", "Account", config.Accounts[0], server, role), err)
+				} else {
+					fmt.Printf("成功删除空目录 %s\n", filepath.Join(tempDir, "WTF", "Account", config.Accounts[0], server, role))
+				}
+			}
+		}
+	}
 }
 
 // 还原逻辑
