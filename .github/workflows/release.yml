@@ -1,10 +1,6 @@
 name: Build Go Application
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
   release:
     types: [created]
 
