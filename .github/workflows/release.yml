@@ -29,7 +29,7 @@ jobs:
         GOOS=windows GOARCH=amd64 go build -o wow-backup-helper.exe .
 
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: wow-backup-helper.exe
       env:
