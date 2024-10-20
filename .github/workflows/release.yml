@@ -28,6 +28,7 @@ jobs:
     - name: Build with Icon
       run: |
         go get github.com/akavel/rsrc
+        echo "$GOPATH/bin" >> $GITHUB_PATH
         rsrc -ico icon.ico
         GOOS=windows GOARCH=amd64 go build -o wow-backup-helper.exe .
 
