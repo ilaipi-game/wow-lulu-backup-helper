@@ -35,13 +35,14 @@ func main() {
 	fmt.Println("选择操作：")
 	fmt.Println("1. 备份")
 	fmt.Println("2. 还原")
+	fmt.Println("3. 初始化")
 	var choice string
-	fmt.Print("输入你的选择（1或2）：")
+	fmt.Print("输入你的选择（1/2/3）：")
 	fmt.Scanln(&choice)
 
 	// 检查用户输入
-	if choice != "1" && choice != "2" {
-		fmt.Println("无效的选择，请输入1或2。")
+	if choice != "1" && choice != "2" && choice != "3" {
+		fmt.Println("无效的选择，请输入1/2/3。")
 		return
 	}
 
@@ -54,6 +55,9 @@ func main() {
 		}
 		fmt.Println("发现临时文件夹，开始还原...")
 		restore(tempDir, workdir)
+	} else if choice == "3" {
+		// 删除指定目录
+		cleanUpClassic(workdir)
 	} else {
 		err = os.MkdirAll(tempDir, os.ModePerm)
 		if err != nil {
@@ -62,8 +66,6 @@ func main() {
 		}
 		backup(tempDir, workdir)
 
-		// 删除指定目录
-		cleanUpClassic(workdir)
 		fmt.Println("备份完成！")
 		return
 	}
